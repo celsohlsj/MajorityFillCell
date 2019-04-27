@@ -1,4 +1,4 @@
-### Fill cells tool for the majority class of land use and land cover maps: a R language script (v1.0.3) ###
+### Fill cells tool for the majority class of land use and land cover maps: a R language script ###
 rm(list=ls())
 setwd("Folder Path with Files")
 library(rgdal)
