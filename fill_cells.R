@@ -1,27 +1,36 @@
-### Fill cells tool for the majority class of land use and land cover maps: a R language script ###
-rm(list=ls())
-setwd("Folder Path with Files")
+### Identifying majority pixel value per polygon in R
+#-------------------
+
+# required libraries
 library(rgdal)
 library(raster)
 
-
- 
+# Abrindo o raster
 raster_lulc = raster("raster_name.tif")
-grid_orig = readOGR("cells_name.shp")
-grid_cells = grid_orig
 
-# Function to Identify Major Class
+# Abrindo o shapefile
+grid_orig = readOGR("cells_name.shp")
+grid_cells <- grid_orig
+
+
+# Function to identify the majority class (mode) 
 maj.class = function(x){
   uniqv <- unique(x)
   uniqv[which.max(tabulate(match(x, uniqv)))]
+  
 }
 
+# Appling function defined above in a loop for each cell
 for (i in 1:length(grid_orig)){
-  
+
   # Cutting raster for each cell
   a = crop(raster_lulc, grid_orig[i,])
-  b = as.data.frame(a)
-  c = maj.class(b$nome_raster)
+  
+  # Creating data frame with the information
+  b = as.data.frame(a, na.rm=TRUE) #na.rm=TRUE : delete NA
+  
+  # Appling the function
+  c = maj.class(b)
   
   # Saving the majority class in each cell
   grid_cells@data[i,paste0('maj_class')] = c
@@ -32,4 +41,5 @@ for (i in 1:length(grid_orig)){
 }
 
 # Saving the large filled with the majority class
-writeOGR(grid_cells,paste0("./file_name.shp"), layer="file_name", driver = 'ESRI Shapefile')
+writeOGR(grid_cells,paste0("path_to_file/file_name.shp"), layer="file_name", driver = 'ESRI Shapefile')
+
