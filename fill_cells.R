@@ -5,10 +5,10 @@
 library(rgdal)
 library(raster)
 
-# Abrindo o raster
+# Opening raster
 raster_lulc = raster("raster_name.tif")
 
-# Abrindo o shapefile
+# Opening shapefile
 grid_orig = readOGR("cells_name.shp")
 grid_cells <- grid_orig
 
